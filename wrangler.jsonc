@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "voicepromax",
+  "name": "newpromax",
   "main": "src/index.js",
   "compatibility_date": "2025-06-01",
   "observability": { "enabled": true },
@@ -13,11 +13,13 @@
     "run_worker_first": ["/api/*", "/auth/*", "/app", "/admin", "/dashboard"]
   },
 
+  // WAJIB DIISI: Dashboard Cloudflare -> Storage & Databases -> D1 -> voicepromax-db -> salin "Database ID".
+  // Setelah database dibuat, jalankan isi schema.sql di tab Console database tersebut.
   "d1_databases": [
     {
       "binding": "DB",
       "database_name": "voicepromax-db",
-      "database_id": "GANTI_DENGAN_ID_DARI_wrangler_d1_create"
+      "database_id": "TEMPEL_DATABASE_ID_DI_SINI"
     }
   ],
 
@@ -36,8 +38,10 @@
 
   "vars": {
     "APP_URL": "https://voicepromax.com",
-    "MAYAR_API_BASE": "https://api.mayar.id/hl/v1",
-    "ADMIN_EMAILS": "emailanda@gmail.com",
+    // Sandbox untuk uji coba. Saat go-live ganti ke https://api.mayar.id/hl/v1
+    "MAYAR_API_BASE": "https://api.mayar.io/hl/v1",
+    // WAJIB DIGANTI: email Google Anda (admin didapat saat masuk lewat Google dengan email ini)
+    "ADMIN_EMAILS": "GANTI_DENGAN_EMAIL_GOOGLE_ANDA@gmail.com",
     "EMAIL_FROM": "noreply@voicepromax.com",
     "EMAIL_FROM_NAME": "Voice Promax"
   }
