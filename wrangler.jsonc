@@ -5,6 +5,9 @@
   "compatibility_date": "2025-06-01",
   "observability": { "enabled": true },
 
+  // Aktifkan alamat newpromax.<akun>.workers.dev (bisa dipakai sebelum custom domain tersambung)
+  "workers_dev": true,
+
   // Halaman statis (landing, app, admin) disajikan langsung oleh Cloudflare.
   // Path di bawah ini melewati Worker dulu (API, login, dan penjaga halaman).
   "assets": {
@@ -24,10 +27,11 @@
   ],
 
   // Pengiriman email verifikasi & reset password (Cloudflare Email Service).
-  // Butuh Workers Paid plan dan domain pengirim yang sudah di-onboard di dashboard Email Service.
-  "send_email": [
-    { "name": "EMAIL", "allowed_sender_addresses": ["noreply@voicepromax.com"] }
-  ],
+  // SEMENTARA DINONAKTIFKAN supaya deploy bisa berhasil sebelum domain di-onboard.
+  // Setelah voicepromax.com aktif di Email Service, hapus tanda // di 3 baris di bawah, lalu commit.
+  // "send_email": [
+  //   { "name": "EMAIL", "allowed_sender_addresses": ["noreply@voicepromax.com"] }
+  // ],
 
   // Cek ulang pembayaran yang masih pending setiap 15 menit (cadangan kalau webhook gagal).
   "triggers": { "crons": ["*/15 * * * *"] },
