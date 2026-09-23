@@ -13,14 +13,10 @@
     "run_worker_first": ["/api/*", "/auth/*", "/app", "/admin", "/dashboard"]
   },
 
-  // WAJIB DIISI: Dashboard Cloudflare -> Storage & Databases -> D1 -> voicepromax-db -> salin "Database ID".
-  // Setelah database dibuat, jalankan isi schema.sql di tab Console database tersebut.
+  // Tanpa database_id: saat deploy, Wrangler memakai database bernama voicepromax-db di akun Anda,
+  // atau membuatnya kalau belum ada. Tabel dibuat otomatis oleh Worker saat pertama kali dipakai.
   "d1_databases": [
-    {
-      "binding": "DB",
-      "database_name": "voicepromax-db",
-      "database_id": "TEMPEL_DATABASE_ID_DI_SINI"
-    }
+    { "binding": "DB", "database_name": "voicepromax-db" }
   ],
 
   "r2_buckets": [
@@ -36,16 +32,18 @@
   // Cek ulang pembayaran yang masih pending setiap 15 menit (cadangan kalau webhook gagal).
   "triggers": { "crons": ["*/15 * * * *"] },
 
+  // Variabel yang diisi di dashboard (Settings -> Variables and Secrets) tidak dihapus saat deploy.
+  // Isi ADMIN_EMAILS di sana: email Google Anda, tipe Text.
+  "keep_vars": true,
+
   "vars": {
     "APP_URL": "https://voicepromax.com",
     // Sandbox untuk uji coba. Saat go-live ganti ke https://api.mayar.id/hl/v1
     "MAYAR_API_BASE": "https://api.mayar.io/hl/v1",
-    // WAJIB DIGANTI: email Google Anda (admin didapat saat masuk lewat Google dengan email ini)
-    "ADMIN_EMAILS": "GANTI_DENGAN_EMAIL_GOOGLE_ANDA@gmail.com",
     "EMAIL_FROM": "noreply@voicepromax.com",
     "EMAIL_FROM_NAME": "Voice Promax"
   }
 
-  // Secrets (isi dengan `npx wrangler secret put NAMA`):
+  // Secrets (isi di dashboard Settings -> Variables and Secrets, tipe Secret, atau `npx wrangler secret put NAMA`):
   // GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BOSON_API_KEY, MAYAR_API_KEY, MAYAR_WEBHOOK_TOKEN
 }
