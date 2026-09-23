@@ -1,0 +1,47 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "voicepromax",
+  "main": "src/index.js",
+  "compatibility_date": "2025-06-01",
+  "observability": { "enabled": true },
+
+  // Halaman statis (landing, app, admin) disajikan langsung oleh Cloudflare.
+  // Path di bawah ini melewati Worker dulu (API, login, dan penjaga halaman).
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*", "/auth/*", "/app", "/admin", "/dashboard"]
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "voicepromax-db",
+      "database_id": "GANTI_DENGAN_ID_DARI_wrangler_d1_create"
+    }
+  ],
+
+  "r2_buckets": [
+    { "binding": "BUCKET", "bucket_name": "voicepromax-audio" }
+  ],
+
+  // Pengiriman email verifikasi & reset password (Cloudflare Email Service).
+  // Butuh Workers Paid plan dan domain pengirim yang sudah di-onboard di dashboard Email Service.
+  "send_email": [
+    { "name": "EMAIL", "allowed_sender_addresses": ["noreply@voicepromax.com"] }
+  ],
+
+  // Cek ulang pembayaran yang masih pending setiap 15 menit (cadangan kalau webhook gagal).
+  "triggers": { "crons": ["*/15 * * * *"] },
+
+  "vars": {
+    "APP_URL": "https://voicepromax.com",
+    "MAYAR_API_BASE": "https://api.mayar.id/hl/v1",
+    "ADMIN_EMAILS": "emailanda@gmail.com",
+    "EMAIL_FROM": "noreply@voicepromax.com",
+    "EMAIL_FROM_NAME": "Voice Promax"
+  }
+
+  // Secrets (isi dengan `npx wrangler secret put NAMA`):
+  // GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, BOSON_API_KEY, MAYAR_API_KEY, MAYAR_WEBHOOK_TOKEN
+}
