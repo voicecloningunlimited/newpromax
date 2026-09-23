@@ -1,6 +1,7 @@
 import { json, HttpError } from './lib/util.js';
 import { handleAuth, getUser, AUTH_PATHS } from './lib/auth.js';
 import { runCron } from './lib/payments.js';
+import { ensureSchema } from './lib/schema.js';
 import { apiRoutes } from './routes/api.js';
 import { adminRoutes } from './routes/admin.js';
 import { accountRoutes } from './routes/account.js';
@@ -17,6 +18,8 @@ export default {
   async fetch(req, env, ctx) {
     const url = new URL(req.url);
     try {
+      const butuhDb = url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/') || url.pathname === '/app' || url.pathname === '/admin';
+      if (butuhDb) await ensureSchema(env);
       if (AUTH_PATHS.has(url.pathname)) return await handleAuth(req, env, url);
 
       if (url.pathname.startsWith('/api/') || url.pathname.startsWith('/auth/')) {
@@ -55,6 +58,6 @@ export default {
   },
 
   async scheduled(_event, env, ctx) {
-    ctx.waitUntil(runCron(env));
+    ctx.waitUntil(ensureSchema(env).then(() => runCron(env)));
   },
 };
